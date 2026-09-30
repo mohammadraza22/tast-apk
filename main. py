@@ -1,0 +1,62 @@
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.label import Label
+from kivy.uix.textinput import TextInput
+from kivy.uix.button import Button
+from kivy.uix.popup import Popup
+
+
+class TestApp(BoxLayout):
+    def __init__(self, **kwargs):
+        super().__init__(orientation='vertical', padding=30, spacing=15, **kwargs)
+
+        title = Label(
+            text='[b]Test APK[/b]',
+            markup=True,
+            font_size='30sp',
+            size_hint=(1, 0.2),
+            color=(0.4, 0.8, 1, 1)
+        )
+        self.add_widget(title)
+
+        self.add_widget(Label(text='Username', size_hint=(1, 0.08)))
+
+        self.username_input = TextInput(
+            multiline=False,
+            size_hint=(1, 0.1),
+            hint_text='Enter your name'
+        )
+        self.add_widget(self.username_input)
+
+        submit_btn = Button(
+            text='Submit',
+            font_size='18sp',
+            size_hint=(0.8, 0.12),
+            pos_hint={'center_x': 0.5},
+            background_color=(0.2, 0.6, 0.9, 1)
+        )
+        submit_btn.bind(on_press=self.submit)
+        self.add_widget(submit_btn)
+
+    def submit(self, *args):
+        name = self.username_input.text.strip()
+        if name:
+            Popup(
+                title='Success',
+                content=Label(text='Hello ' + name + '!'),
+                size_hint=(0.8, 0.3)
+            ).open()
+        else:
+            Popup(
+                title='Error',
+                content=Label(text='Please enter a name'),
+                size_hint=(0.8, 0.3)
+            ).open()
+
+
+class MyApp(App):
+    def build(self):
+        return TestApp()
+
+
+MyApp().run()
